@@ -147,8 +147,6 @@ class FeatureEngine:
                 if chk_null >= 1:
                     chk_null = f"{chk_null} **"
                 FeatureEngine._logger.info(f"no. of nulls for col '{c}' in set '{df_name}': {chk_null}")
-            print("")
-        FeatureEngine._logger.info("+++++++++++++++++++++++++++++++++++++++++++++++++++")
             
     @staticmethod
     def nan_inputer(datasets: list, column: str):
