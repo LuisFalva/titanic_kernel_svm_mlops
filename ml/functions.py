@@ -235,7 +235,7 @@ class FeatureEngine:
         dataset[column] = train_df[column].astype(int)
 
     @staticmethod
-    def check_nulls(**kwargs):
+    def check_nulls(env=None, **kwargs):
         """
         Check the number of null values in each column of each
         DataFrame in a dictionary of DataFrames.
@@ -252,9 +252,12 @@ class FeatureEngine:
                 chk_null = df[c].isnull().sum()
                 if chk_null >= 1:
                     chk_null = f"{chk_null} **"
-                FeatureEngine._logger.info(
-                    f"no. of nulls for col '{c}' in set '{df_name}': {chk_null}"
-                )
+                if env == "vm":
+                    print(f"no. of nulls for col '{c}' in set '{df_name}': {chk_null}")
+                else:
+                    FeatureEngine._logger.info(
+                        f"no. of nulls for col '{c}' in set '{df_name}': {chk_null}"
+                    )
 
     @staticmethod
     def nan_inputer(datasets: list, column: str):
