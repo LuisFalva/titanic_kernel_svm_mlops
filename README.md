@@ -1,5 +1,6 @@
 # Kernel Titanic 🚢
-This project is a Python package with a CLI to train and evaluate a machine learning model for the famous Kaggle's Titanic competition. The package includes functions for data cleaning, feature engineering, model training, and evaluation.
+This project is a Python package with a CLI to train and evaluate a machine learning model for the famous [Kaggle's Titanic competition](https://www.kaggle.com/competitions/titanic). 
+The package includes functions for data cleaning, feature engineering, model training, and evaluation.
 
 ## Setup 🚀
 
