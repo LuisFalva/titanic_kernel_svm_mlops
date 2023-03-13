@@ -14,9 +14,12 @@ class SVM:
         )
         self._logger = logging.getLogger(__name__)
     
-    def score(self, x_train, y_train):
+    def score(self, x_train, y_train, env=None):
         acc_score = round(self.model.score(x_train, y_train) * 100, 2)
-        self._logger.info(f"Accuracy SVM score: {acc_score}")
+        if env == "vm":
+            print(f"Accuracy SVM score: {acc_score}")
+        else:
+            self._logger.info(f"Accuracy SVM score: {acc_score}")
         
     def shap(self, x_train, x_test, feature_names, plot_type="bar"):
         explainer = shap.Explainer(self.model.predict, x_train)
