@@ -1,3 +1,54 @@
+"""
+This module contains classes and methods for performing various data preparation and analysis tasks
+using pandas, numpy, and other data science libraries.
+
+Classes:
+    PandasProfiler: A class for generating a pandas-profiling report for a pandas DataFrame.
+    DropPdColumns: A class for dropping columns from a pandas DataFrame.
+    FeatureEngine: A class for performing various feature engineering tasks on a pandas DataFrame.
+    SetSplit: A class for splitting a dataset into training and test sets.
+
+Functions:
+    None.
+
+Module Constants:
+    None.
+
+Example:
+    # import the PandasProfiler and DropPdColumns classes from the module
+    from my_module import PandasProfiler, DropPdColumns
+
+    # create a DataFrame with columns 'A', 'B', 'C'
+    df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})
+
+    # create a PandasProfiler object to profile the DataFrame
+    profiler = PandasProfiler(df, 'My Profile Report')
+
+    # generate the report and display it
+    report = profiler.profiler()
+    report.to_widgets()
+
+    # create a DropPdColumns object to drop columns 'B' and 'C'
+    dropper = DropPdColumns(df, ['B', 'C'])
+
+    # drop the columns and print the resulting DataFrame
+    dropper.drop()
+    print(dropper.df)
+
+    Output:
+    A pandas-profiling report with an overview of the DataFrame,
+    including statistics, distributions, and correlations.
+
+    Cols droped from   A  B  C
+    0  1  4  7
+    1  2  5  8
+    2  3  6  9 , cols: ['B', 'C']
+       A
+    0  1
+    1  2
+    2  3
+"""
+
 import logging
 import numpy as np
 import pandas as pd
@@ -27,19 +78,31 @@ class PandasProfiler:
     report.to_widgets()
 
     Output:
-    A pandas-profiling report with an overview of the DataFrame, including statistics, distributions, and correlations.
+    A pandas-profiling report with an overview of the DataFrame,
+    including statistics, distributions, and correlations.
     """
-    
-    def __init__(self, df, title):
-        self.df = df
+    def __init__(self, pandas_df, title):
+        self.pandas_df = pandas_df
         self.title = title
-        
+
     def profiler(self):
+        """Generate a profile report for the Pandas dataframe.
+
+        Returns:
+            A profile report (yp.ProfileReport object) of the Pandas dataframe.
+
+        Raises:
+            NameError: If the Pandas dataframe is not defined.
+
+        Example:
+            >> profiler = Profiler(pandas_df=my_df, title="My Data")
+            >> profile_report = profiler.profiler()
+        """
         try:
-            return yp.ProfileReport(self.df, title=self.title)
-        except NameError as ne:
-            raise NameError(f"name '{self.df}' is not defined. {ne}")
-            
+            return yp.ProfileReport(self.pandas_df, title=self.title)
+        except NameError as name_error:
+            raise NameError(f"name '{self.pandas_df}' is not defined. {name_error}")
+
 
 class DropPdColumns:
     """
@@ -75,14 +138,14 @@ class DropPdColumns:
     1  2
     2  3
     """
-    
+
     def __init__(self, df, columns_to_drop, axis=1, inplace=True):
         self.df = df
         self.columns_to_drop = columns_to_drop
         self._axis = axis
         self._inplace = inplace
         self._logger = logging.getLogger(__name__)
-        
+
     def drop(self):
         try:
             self.df.drop(self.columns_to_drop, axis=self._axis, inplace=self._inplace)
@@ -94,11 +157,12 @@ class DropPdColumns:
 class FeatureEngine:
 
     _logger = logging.getLogger(__name__)
-    
+
     @staticmethod
     def _compute_random_num(mean, std, is_null):
         """
-        Compute an array of random integers with a specified mean, standard deviation, and number of elements.
+        Compute an array of random integers with a specified mean,
+        standard deviation, and number of elements.
 
         Parameters:
         mean (int): The mean value of the random numbers.
@@ -110,7 +174,7 @@ class FeatureEngine:
         """
         rand = np.random.randint(mean - std, mean + std, size=is_null)
         return rand
-    
+
     @staticmethod
     def _fill_nan(train_df, dataset, rand, column):
         """
@@ -129,11 +193,12 @@ class FeatureEngine:
         slice_df[np.isnan(slice_df)] = rand
         dataset[column] = slice_df
         dataset[column] = train_df[column].astype(int)
-        
+
     @staticmethod
     def check_nulls(**kwargs):
         """
-        Check the number of null values in each column of each DataFrame in a dictionary of DataFrames.
+        Check the number of null values in each column of each
+        DataFrame in a dictionary of DataFrames.
 
         Parameters:
         **kwargs (dict): A dictionary of DataFrames to check null values in.
@@ -147,12 +212,15 @@ class FeatureEngine:
                 chk_null = df[c].isnull().sum()
                 if chk_null >= 1:
                     chk_null = f"{chk_null} **"
-                FeatureEngine._logger.info(f"no. of nulls for col '{c}' in set '{df_name}': {chk_null}")
-            
+                FeatureEngine._logger.info(
+                    f"no. of nulls for col '{c}' in set '{df_name}': {chk_null}"
+                )
+
     @staticmethod
     def nan_inputer(datasets: list, column: str):
         """
-        Impute missing values in a column of multiple DataFrames by filling NaN values with random integers.
+        Impute missing values in a column of multiple
+        DataFrames by filling NaN values with random integers.
 
         Parameters:
         datasets (list): A list of DataFrames to impute missing values in.
@@ -169,7 +237,7 @@ class FeatureEngine:
             is_null = dataset[column].isnull().sum()
             rand = FeatureEngine._compute_random_num(mean, std, is_null)
             FeatureEngine._fill_nan(train_df, dataset, rand, column)
-            
+
     @staticmethod
     def common_value_inputer(df, col: str, common_value: str):
         """
@@ -184,7 +252,7 @@ class FeatureEngine:
         None
         """
         df[col] = df[col].fillna(common_value)
-        
+
     @staticmethod
     def mean_inputer(df, col: str):
         """
@@ -199,10 +267,10 @@ class FeatureEngine:
         """
         df = df.fillna(df[col].mean())
         return df
-    
-    
+
+
 class SetSplit:
-    
+
     def __init__(self, train, test, pd_module=pd):
         self._train = train
         self._test = test
@@ -210,7 +278,7 @@ class SetSplit:
         self.Y_train = None
         self.X_test = None
         self._pd = pd_module
-    
+
     def split(self, **kwargs):
         self.X_train = self._train.drop(kwargs["train_col"], axis=1)
         self.Y_train = self._train[kwargs["train_col"]]
