@@ -45,13 +45,20 @@ IPython could not be loaded!
 2023-03-12 23:28:09,520 - ml.functions - INFO - no. of nulls for
 ```
 
-## Local dev and test 🛠️
+## Local Dev & Test 🛠️
 Developers can run tests on local environment before pushing any new feature branch into remote. 
 This can be useful for local development purposes, as it allows developers to test their changes in a containerized environment that closely matches the production environment.
 
 ```sh   
-make test-all tag=dev
+make test-all
 ```
+
+For build your test docker image run:
+
+```sh   
+make docker-build tag=<your-dev-tag-name>
+```
+
 > **Warning**:
 > Make sure to use the 'tag' argument to create a new docker image with your changes.
 
