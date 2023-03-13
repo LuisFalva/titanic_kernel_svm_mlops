@@ -1,5 +1,6 @@
 import logging
 import numpy as np
+import pandas as pd
 import ydata_profiling as yp
 
 
@@ -202,12 +203,13 @@ class FeatureEngine:
     
 class SetSplit:
     
-    def __init__(self, train, test):
+    def __init__(self, train, test, pd_module=pd):
         self._train = train
         self._test = test
         self.X_train = None
         self.Y_train = None
         self.X_test = None
+        self._pd = pd_module
     
     def split(self, **kwargs):
         self.X_train = self._train.drop(kwargs["train_col"], axis=1)
