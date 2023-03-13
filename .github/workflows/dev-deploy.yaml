@@ -24,10 +24,13 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          python -m unittest discover -v tests/ml/functions
-          python -m unittest discover -v tests/ml/load
-          python -m unittest discover -v tests/ml/models
-          python -m unittest discover -v tests/ml/preprocess
+          make test-functions
+          make test-load
+          make test-models
+          make test-preprocess
 
       - name: Run Pipeline Test
-        run: python -m unittest discover -v tests/pipeline
+        run: make test-pipeline
+
+      - name: Run Integration Test
+          run: make test-integration
