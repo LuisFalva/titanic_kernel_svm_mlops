@@ -65,6 +65,7 @@ class PandasProfiler:
 
     Methods:
     profiler(): Generate a pandas-profiling report for the DataFrame.
+    save_report(file_path): Save the pandas-profiling report to a file.
 
     Example:
     # create a DataFrame with columns 'A', 'B', 'C'
@@ -77,9 +78,13 @@ class PandasProfiler:
     report = profiler.profiler()
     report.to_widgets()
 
+    # save the report to a file
+    profiler.save_report('report.html')
+
     Output:
     A pandas-profiling report with an overview of the DataFrame,
-    including statistics, distributions, and correlations.
+    including statistics, distributions, and correlations. The report is also
+    saved to a file in HTML format.
     """
     def __init__(self, pandas_df, title):
         self.pandas_df = pandas_df
@@ -95,13 +100,30 @@ class PandasProfiler:
             NameError: If the Pandas dataframe is not defined.
 
         Example:
-            >> profiler = Profiler(pandas_df=my_df, title="My Data")
+            >> profiler = PandasProfiler(pandas_df=my_df, title="My Data")
             >> profile_report = profiler.profiler()
         """
         try:
             return yp.ProfileReport(self.pandas_df, title=self.title)
         except NameError as name_error:
-            raise NameError(f"name '{self.pandas_df}' is not defined. {name_error}")
+            raise NameError(f"name '{self.pandas_df}' is not defined. {name_error}") from name_error
+
+    def save_report(self, file_path):
+        """Save the pandas-profiling report to a file.
+
+        Args:
+            file_path (str): The file path to save the report.
+
+        Returns:
+            None. The report is saved to the specified file path.
+
+        Example:
+            >> profiler = PandasProfiler(pandas_df=my_df, title="My Data")
+            >> profile_report = profiler.profiler()
+            >> profiler.save_report('report.html')
+        """
+        profile_report = self.profiler()
+        profile_report.to_file(file_path)
 
 
 class DropPdColumns:
@@ -139,19 +161,37 @@ class DropPdColumns:
     2  3
     """
 
-    def __init__(self, df, columns_to_drop, axis=1, inplace=True):
-        self.df = df
+    def __init__(self, pandas_df, columns_to_drop, axis=1, inplace=True):
+        self.pandas_df = pandas_df
         self.columns_to_drop = columns_to_drop
         self._axis = axis
         self._inplace = inplace
         self._logger = logging.getLogger(__name__)
 
     def drop(self):
+        """Drop specified columns from the Pandas dataframe.
+
+        Returns:
+            None. The specified columns are dropped from the Pandas dataframe.
+
+        Raises:
+            NameError: If the Pandas dataframe is not defined.
+
+        Example:
+            >> df = pd.DataFrame({'A': [1, 2], 'B': [3, 4]})
+            >> d = Drop(df=df, columns_to_drop=['B'], axis=1, inplace=True)
+            >> d.drop()
+            None
+            >> df
+               A
+            0  1
+            1  2
+        """
         try:
-            self.df.drop(self.columns_to_drop, axis=self._axis, inplace=self._inplace)
-            self._logger.info(f"Cols dropped: {self.columns_to_drop}")
-        except NameError as ne:
-            raise NameError(f"name '{self.df}' is not defined. {ne}")
+            self.pandas_df.drop(self.columns_to_drop, axis=self._axis, inplace=self._inplace)
+            self._logger.info("Cols dropped: %s", self.columns_to_drop)
+        except NameError as name_error:
+            raise NameError(f"name '{self.pandas_df}' is not defined. {name_error}") from name_error
 
 
 class FeatureEngine:
