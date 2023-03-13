@@ -2,6 +2,9 @@
 *.idea
 *.DS_Store
 *__pycache__
+*.coverage
+*coverage-reports
+*.pytest_cache
 
 # No push output data
 pipeline/data/output/*

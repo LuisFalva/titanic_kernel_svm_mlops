@@ -2,7 +2,17 @@
 setup:
 	python -m venv venv
 	source venv/bin/activate && \
+	venv/bin/pip install --upgrade pip
 	venv/bin/pip install -r requirements.txt
+
+# Clean env
+clean:
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
+	find . -name '.DS_Store' -type f -delete
+	rm -rf .tox .coverage htmlcov coverage-reports pylint.txt .pytest_cache
 
 # Run all tests
 test-all:
@@ -10,29 +20,44 @@ test-all:
 	make test-load
 	make test-models
 	make test-preprocess
+
+test-clean:
+	make test-all
 	make test-pipeline
 	make test-integration
+	make clean
+
+test-coverage:
+	coverage report -m --fail-under 80 --omit "*/__init__.py"
+	coverage html -d coverage-reports
 
 # Run the tests in the tests directory
 test-functions:
-	python -m unittest discover -v tests/ml/functions
+	coverage run --source=ml -m pytest -q tests/ml/functions -W ignore::UserWarning
+	coverage report -m --fail-under 80 --omit="*/__init__.py,ml/load/*.py,ml/models/*.py,ml/preprocess/*.py"
+	coverage html -d coverage-reports
 
 test-load:
-	python -m unittest discover -v tests/ml/load
+	coverage run --source=ml/load -m pytest -q tests/ml/load -W ignore::UserWarning
+	make test-coverage
 
 test-models:
-	python -m unittest discover -v tests/ml/models
+	coverage run --source=ml/models -m pytest -q tests/ml/models -W ignore::UserWarning
+	make test-coverage
 
 test-preprocess:
-	python -m unittest discover -v tests/ml/preprocess
+	coverage run --source=ml/preprocess -m pytest -q tests/ml/preprocess -W ignore::UserWarning
+	make test-coverage
 
 # Run pipeline test
 test-pipeline:
-	python -m unittest discover -v tests/pipeline
+	coverage run --source=pipeline -m pytest -q tests/pipeline -W ignore::UserWarning
+	make test-coverage
 
 # Run integration test
 test-integration:
-	python -m unittest discover -v tests/integration
+	coverage run --source=main -m pytest -q tests/integration -W ignore::UserWarning
+	make test-coverage
 
 # Run the linter on the code in the ml directory
 lint:

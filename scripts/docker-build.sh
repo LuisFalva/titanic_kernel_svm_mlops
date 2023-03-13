@@ -4,6 +4,9 @@
 image="titanic_kernel_svm_mlops"
 tag=${1:-"latest"}
 
+# Prune and freeing up memory
+docker system prune -a -f --volumes
+
 # Build the Docker image
 docker build -t "$image":"$tag" .
 

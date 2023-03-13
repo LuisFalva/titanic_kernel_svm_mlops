@@ -23,14 +23,13 @@ jobs:
         working-directory: .
 
       - name: Run Unit Tests
-        run: |
-          make test-functions
-          make test-load
-          make test-models
-          make test-preprocess
+        run: make test-all
 
       - name: Run Pipeline Test
         run: make test-pipeline
 
       - name: Run Integration Test
         run: make test-integration
+
+      - name: Clean Directory
+        run: make clean
