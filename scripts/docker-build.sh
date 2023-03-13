@@ -1,12 +1,12 @@
 #!/bin/bash -e
 
 # Define the image name and tag
-IMAGE_NAME="titanic_kernel_svm_mlops"
-IMAGE_TAG="latest"
+image="titanic_kernel_svm_mlops"
+tag=${1:-"latest"}
 
 # Build the Docker image
-docker build -t "$IMAGE_NAME":"$IMAGE_TAG" .
+echo docker build -t "$image":"$tag" .
 
 # Tag the image with the registry name
-REGISTRY_IMAGE_NAME="luisfalva/$IMAGE_NAME"
-docker tag "$IMAGE_NAME":"$IMAGE_TAG" "$REGISTRY_IMAGE_NAME":"$IMAGE_TAG"
+registry_image_name="luisfalva/$image"
+echo docker tag "$image":"$tag" "$registry_image_name":"$tag"
