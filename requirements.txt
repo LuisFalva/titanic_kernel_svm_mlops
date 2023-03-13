@@ -4,3 +4,4 @@ scikit-learn
 shap
 ydata-profiling
 coverage
+pytest

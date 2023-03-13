@@ -4,6 +4,7 @@
 *__pycache__
 *.coverage
 *coverage-reports
+*.pytest_cache
 
 # No push output data
 pipeline/data/output/*

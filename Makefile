@@ -24,40 +24,30 @@ test-all:
 
 test-clean:
 	make test-all
+	coverage report -m --fail-under 80
+	coverage html -d coverage-reports
 	make clean
 
 # Run the tests in the tests directory
 test-functions:
-	coverage run -m unittest discover -v tests/ml/functions
-	coverage report --fail-under 80
-	coverage html -d coverage-reports
+	coverage run --source=ml -m pytest tests/ml/functions
 
 test-load:
-	coverage run -m unittest discover -v tests/ml/load
-	coverage report --fail-under 80
-	coverage html -d coverage-reports
+	coverage run --source=ml -m pytest tests/ml/load
 
 test-models:
-	coverage run -m unittest discover -v tests/ml/models
-	coverage report --fail-under 80
-	coverage html -d coverage-reports
+	coverage run --source=ml -m pytest tests/ml/models
 
 test-preprocess:
-	coverage run -m unittest discover -v tests/ml/preprocess
-	coverage report --fail-under 80
-	coverage html -d coverage-reports
+	coverage run --source=ml -m pytest tests/ml/preprocess
 
 # Run pipeline test
 test-pipeline:
-	coverage run -m unittest discover -v tests/pipeline
-	coverage report --fail-under 80
-	coverage html -d coverage-reports
+	coverage run --source=ml -m pytest tests/pipeline
 
 # Run integration test
 test-integration:
-	coverage run -m unittest discover -v tests/integration
-	coverage report --fail-under 80
-	coverage html -d coverage-reports
+	coverage run --source=ml -m pytest tests/integration
 
 # Run the linter on the code in the ml directory
 lint:
