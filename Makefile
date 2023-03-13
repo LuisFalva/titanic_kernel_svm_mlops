@@ -28,7 +28,7 @@ test-clean:
 
 # Run the tests in the tests directory
 test-functions:
-	coverage run --source=ml -m pytest tests/ml/functions
+	coverage run --source=ml/functions.py -m pytest tests/ml/functions
 	coverage report -m --fail-under 80
 	coverage html -d coverage-reports
 
