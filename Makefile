@@ -19,45 +19,45 @@ test-all:
 	make test-load
 	make test-models
 	make test-preprocess
-	make test-pipeline
-	make test-integration
+	make test-coverage
 
 test-clean:
 	make test-all
+	make test-pipeline
+	make test-integration
 	make clean
+
+test-coverage:
+	coverage report -m --fail-under 80 --omit "*/__init__.py"
+	coverage html -d coverage-reports
 
 # Run the tests in the tests directory
 test-functions:
-	coverage run --source=ml/functions.py -m pytest tests/ml/functions
-	coverage report -m --fail-under 80
+	coverage run --source=ml -m pytest -q tests/ml/functions -W ignore::UserWarning
+	coverage report -m --fail-under 80 --omit="*/__init__.py,ml/load/*.py,ml/models/*.py,ml/preprocess/*.py"
 	coverage html -d coverage-reports
 
 test-load:
-	coverage run --source=ml -m pytest tests/ml/load
-	coverage report -m --fail-under 80
-	coverage html -d coverage-reports
+	coverage run --source=ml/load -m pytest -q tests/ml/load -W ignore::UserWarning
+	make test-coverage
 
 test-models:
-	coverage run --source=ml -m pytest tests/ml/models
-	coverage report -m --fail-under 80
-	coverage html -d coverage-reports
+	coverage run --source=ml/models -m pytest -q tests/ml/models -W ignore::UserWarning
+	make test-coverage
 
 test-preprocess:
-	coverage run --source=ml -m pytest tests/ml/preprocess
-	coverage report -m --fail-under 80
-	coverage html -d coverage-reports
+	coverage run --source=ml/preprocess -m pytest -q tests/ml/preprocess -W ignore::UserWarning
+	make test-coverage
 
 # Run pipeline test
 test-pipeline:
-	coverage run --source=ml -m pytest tests/pipeline
-	coverage report -m --fail-under 80
-	coverage html -d coverage-reports
+	coverage run --source=pipeline -m pytest -q tests/pipeline -W ignore::UserWarning
+	make test-coverage
 
 # Run integration test
 test-integration:
-	coverage run --source=ml -m pytest tests/integration
-	coverage report -m --fail-under 80
-	coverage html -d coverage-reports
+	coverage run --source=main -m pytest -q tests/integration -W ignore::UserWarning
+	make test-coverage
 
 # Run the linter on the code in the ml directory
 lint:
