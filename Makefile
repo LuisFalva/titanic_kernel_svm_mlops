@@ -12,6 +12,7 @@ test-all:
 	make test-preprocess
 	make test-pipeline
 	make test-integration
+	make docker-build tag=$(tag)
 
 # Run the tests in the tests directory
 test-functions:
@@ -46,4 +47,4 @@ run:
 
 # Run Docker build
 docker-build:
-	sh scripts/docker-build.sh
+	sh scripts/docker-build.sh $(tag)

@@ -11,7 +11,7 @@ To set up the project, run the following command in your terminal:
 make setup
 ```
 
-> **Note**
+> **Note**:
 > This will create a virtual environment and install all the required dependencies.
 
 ## Usage 💻
@@ -21,7 +21,7 @@ To train and evaluate the model, run the following command:
 make run
 ```
 
-> **Note**
+> **Note**:
 > This will execute the run-model.sh script, which activates the virtual environment and runs the main script to train and evaluate the model.
 
 The output will be similar to the following:
@@ -44,6 +44,17 @@ IPython could not be loaded!
 2023-03-12 23:28:09,520 - ml.functions - INFO - no. of nulls for col 'Ticket' in set 'test_df': 0
 2023-03-12 23:28:09,520 - ml.functions - INFO - no. of nulls for
 ```
+
+## Local dev and test 🛠️
+Developers can run tests on local environment before pushing any new feature branch into remote. 
+This can be useful for local development purposes, as it allows developers to test their changes in a containerized environment that closely matches the production environment.
+
+```sh   
+make test-all tag=dev
+```
+> **Warning**:
+> Make sure to use the 'tag' argument to create a new docker image with your changes.
+
 ### Want to contribute? 🤔
 
 Bring it on! If you have an idea or want to ask anything, or there is a bug you want fixed, you may open an [issue ticket](https://github.com/LuisFalva/titanic_kernel_svm_mlops/issues). You will find the guidelines to make an issue request there. Also, you can get a glimpse of [Open Source Contribution Guide best practices here](https://opensource.guide/).
