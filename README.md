@@ -70,3 +70,6 @@ Cheers 🍻!
 ### Support or Contact 📠
 
 Having troubles? You can send a [DM](https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox?compose=CllgCJZZQVJHBJKmdjtXgzlrRcRktFLwFQsvWKqcTRtvQTVcHvgTNSxVzjZqjvDFhZlVJlPKqtg) and I’ll help you sort it out.
+
+### References 📚
+- [Titanic Solution (top 8%)](https://www.kaggle.com/code/akhileshthite/titanic-solution-top-8)
