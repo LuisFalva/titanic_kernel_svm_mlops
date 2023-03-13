@@ -1,3 +1,4 @@
+import os
 import logging
 import pandas as pd
 from ml.models.svm import SVM
@@ -50,6 +51,10 @@ class TitanicKernelSVMPipeline:
 
     def persist(self, test_df, path):
         try:
+            output_dir = os.path.dirname(path)
+            if not os.path.exists(output_dir):
+                self._logger.info(f"Creating 'output' folder for storing 'predictions.csv'")
+                os.makedirs(output_dir)
             submission = pd.DataFrame({
                 PASSENGER_ID: test_df[PASSENGER_ID],
                 SURVIVED: self._y_pred
