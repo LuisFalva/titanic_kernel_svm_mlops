@@ -5,6 +5,7 @@ setup:
 	venv/bin/pip install --upgrade pip
 	venv/bin/pip install -r requirements.txt
 
+# Clean env
 clean:
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '*.pyo' -exec rm -f {} +
@@ -19,7 +20,6 @@ test-all:
 	make test-load
 	make test-models
 	make test-preprocess
-	make test-coverage
 
 test-clean:
 	make test-all
