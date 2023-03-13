@@ -4,7 +4,7 @@ import pandas as pd
 from ml.models.svm import SVM
 from ml.load.datasets import DatasetLoader
 from ml.preprocess.feature import Encoder, Scalers
-from ml.functions import DropPdColumns, FeatureEngine, SetSplit
+from ml.functions import DropPdColumns, FeatureEngine, SetSplit, PandasProfiler
 from pipeline.constants import PASSENGER_ID, NAME, TICKET, CABIN, AGE, EMBARKED, SEX, FARE, SURVIVED
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -22,6 +22,11 @@ class TitanicKernelSVMPipeline:
         self._slrs = Scalers()
         self._svm = SVM()
         self._y_pred = None
+
+    def _if_dir_exists(self, output_dir):
+        if not os.path.exists(output_dir):
+            self._logger.info(f"Creating '{output_dir}' local directory.")
+            os.makedirs(output_dir)
 
     def preprocess_dataset(self, train_df, test_df):
         try:
@@ -52,9 +57,7 @@ class TitanicKernelSVMPipeline:
     def persist(self, test_df, path):
         try:
             output_dir = os.path.dirname(path)
-            if not os.path.exists(output_dir):
-                self._logger.info(f"Creating 'output' folder for storing 'predictions.csv'")
-                os.makedirs(output_dir)
+            self._if_dir_exists(output_dir)
             submission = pd.DataFrame({
                 PASSENGER_ID: test_df[PASSENGER_ID],
                 SURVIVED: self._y_pred
@@ -63,6 +66,17 @@ class TitanicKernelSVMPipeline:
         except Exception as e:
             raise self._logger.error(f"Fatal Error On 'persist' Step. Trace: {e}")
 
+    def save_profiler_report(self, pandas_df, dataset_type: str):
+        profiler = PandasProfiler(
+            pandas_df=pandas_df,
+            title=f"Pandas Profiler {dataset_type} Dataset"
+        )
+        base_path = "data/output/report"
+        self._if_dir_exists(base_path)
+        report_path = f"{base_path}/{dataset_type}-report.html"
+        profiler.save_report(report_path)
+        self._logger.info(f"Profiler Report Generated Successfully On: '{report_path}'.")
+
     def process(self):
         self._logger.info(f'Load Train Dataset: {self.train_ds_path}')
         train_loader = DatasetLoader(self.train_ds_path)
@@ -70,11 +84,17 @@ class TitanicKernelSVMPipeline:
         self._logger.info(f'Successful Load.')
         self._feat.check_nulls(test_df=train_df)
 
+        self._logger.info(f'Generate Profiler Report for Train Dataset.')
+        self.save_profiler_report(train_df, "train")
+
         self._logger.info(f'Load Test Dataset: {self.test_ds_path}')
         test_loader = DatasetLoader(self.test_ds_path)
         test_df = test_loader.load()
         self._logger.info(f'Successful Load.')
         self._feat.check_nulls(test_df=test_df)
+
+        self._logger.info(f'Generate Profiler Report for Test Dataset.')
+        self.save_profiler_report(test_df, "test")
 
         self._logger.info('Start Train & Test Datasets Preprocess')
         train_df, test_df = self.preprocess_dataset(train_df, test_df)

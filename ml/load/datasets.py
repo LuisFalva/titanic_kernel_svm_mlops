@@ -34,4 +34,4 @@ class DatasetLoader:
             load_df = pd.read_csv(self._file_path)
             return load_df
         except FileNotFoundError as fnf:
-            raise FileNotFoundError(f"File from 'file_path' does not exists. Provide a valid path. {fnf}")
+            raise FileNotFoundError(f"File from 'file_path' does not exists. Provide a valid path. {fnf}") from fnf

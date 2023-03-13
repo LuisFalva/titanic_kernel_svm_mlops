@@ -11,7 +11,7 @@ class TestDropPdColumns(unittest.TestCase):
 
     def test_drop_method_drops_columns_from_dataframe(self):
         self.dropper.drop()
-        self.assertListEqual(list(self.dropper.df.columns), ['A'])
+        self.assertListEqual(list(self.dropper.pandas_df.columns), ['A'])
 
 
 if __name__ == '__main__':
