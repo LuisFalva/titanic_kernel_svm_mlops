@@ -33,4 +33,4 @@ jobs:
         run: make test-pipeline
 
       - name: Run Integration Test
-          run: make test-integration
+        run: make test-integration
