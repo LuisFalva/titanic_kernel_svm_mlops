@@ -4,19 +4,10 @@ WORKDIR /app
 
 COPY . ./
 
-RUN make setup
+RUN pip install -r requirements.txt
 
 # Run unit tests
-RUN make test-functions
-RUN make test-load
-RUN make test-models
-RUN make test-preprocess
-
-# Run pipeline test
-RUN make test-pipeline
-
-# Run integration test
-RUN make test-integration
+RUN make test-all
 
 RUN chmod +x run-model.sh
 CMD ["/bin/bash", "./run-model.sh"]

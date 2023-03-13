@@ -1,26 +1,20 @@
 import unittest
 import pandas as pd
-from pipeline.pipeline import TitanicKernelSVMPipeline
+from main import TitanicKernelSVMMain
 from pipeline.constants import PASSENGER_ID, SURVIVED
 
 
 class TestTitanicKernelSVMPipelineIntegration(unittest.TestCase):
 
     def setUp(self):
-        self.train_ds_path = "data/input/train.csv"
-        self.test_ds_path = "data/input/test.csv"
         self.output_path = "data/output/predictions.csv"
 
     def test_pipeline_integration(self):
         # create a pipeline instance
-        pipeline = TitanicKernelSVMPipeline(
-            self.train_ds_path,
-            self.test_ds_path,
-            self.output_path
-        )
+        main = TitanicKernelSVMMain()
 
         # run the pipeline
-        pipeline.process()
+        main.start()
 
         # load the predictions file
         predictions_df = pd.read_csv(self.output_path)

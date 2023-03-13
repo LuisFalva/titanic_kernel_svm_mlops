@@ -1,6 +1,7 @@
 # Set up the environment with the required dependencies
 setup:
 	python -m venv venv
+	source venv/bin/activate && \
 	venv/bin/pip install -r requirements.txt
 
 # Run all tests
@@ -35,13 +36,14 @@ test-integration:
 
 # Run the linter on the code in the ml directory
 lint:
-	venv/bin/pylint ml/
-	venv/bin/pylint pipeline/
+	pylint ml/
+	pylint pipeline/
 
 # Run the main script in the ml directory
 run:
+	chmod +x run-model.sh
 	sh run-model.sh
 
 # Run Docker build
 docker-build:
-	sh scripts/docker_build_push.sh
+	sh scripts/docker-build.sh
