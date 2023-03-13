@@ -11,7 +11,7 @@ To set up the project, run the following command in your terminal:
 make setup
 ```
 
-> *Note*
+> **Note**
 > This will create a virtual environment and install all the required dependencies.
 
 ## Usage 💻
@@ -21,7 +21,7 @@ To train and evaluate the model, run the following command:
 make run
 ```
 
-> *None*
+> **Note**
 > This will execute the run-model.sh script, which activates the virtual environment and runs the main script to train and evaluate the model.
 
 The output will be similar to the following:
