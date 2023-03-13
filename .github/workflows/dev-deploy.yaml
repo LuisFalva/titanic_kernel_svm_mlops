@@ -31,6 +31,3 @@ jobs:
 
       - name: Run Pipeline Test
         run: python -m unittest discover -v tests/pipeline
-
-      - name: Run Docker Build & Push
-        run: sh scripts/docker_build_push.sh

@@ -16,21 +16,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-        working-directory: .
-
-      - name: Run Unit Tests
-        run: |
-          python -m unittest discover -v tests/ml/functions
-          python -m unittest discover -v tests/ml/load
-          python -m unittest discover -v tests/ml/models
-          python -m unittest discover -v tests/ml/preprocess
-
-      - name: Run Pipeline Test
-        run: python -m unittest discover -v tests/pipeline
-
-      - name: Run Integration Test
-        run: python -m unittest discover -v tests/integration
+      - name: Run Docker Build
+        run: sh scripts/docker_build_push.sh
