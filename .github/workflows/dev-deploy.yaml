@@ -1,0 +1,32 @@
+
+name: To Dev Deploy
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run Unit Tests
+        run: |
+          python -m unittest tests/ml/functions/test_drop_pd_columns.py
+          python -m unittest tests/ml/functions/test_feature_engine.py
+          python -m unittest tests/ml/functions/test_pandas_profiler.py
+          python -m unittest tests/ml/functions/test_set_split.py
+          python -m unittest tests/ml/load/test_dataset_loader.py
+          python -m unittest tests/ml/models/test_svm.py
+          python -m unittest tests/ml/preprocess/test_encoder.py
+          python -m unittest tests/ml/preprocess/test_scalers.py
+          python -m unittest tests/pipeline/test_pipeline.py
+
+      - name: Run Integration Test
+        run: python -m unittest tests/integration/test_pipeline.py
