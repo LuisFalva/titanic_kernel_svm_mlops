@@ -4,4 +4,6 @@
 *__pycache__
 
 # No push output data
-data/output/*
+pipeline/data/output/*
+tests/integration/data
+tests/pipeline/data

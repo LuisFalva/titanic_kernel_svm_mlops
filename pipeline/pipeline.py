@@ -7,7 +7,7 @@ from ml.preprocess.feature import Encoder, Scalers
 from ml.functions import DropPdColumns, FeatureEngine, SetSplit, PandasProfiler
 from pipeline.constants import PASSENGER_ID, NAME, TICKET, CABIN, AGE, EMBARKED, SEX, FARE, SURVIVED
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 
 class TitanicKernelSVMPipeline:
@@ -15,7 +15,7 @@ class TitanicKernelSVMPipeline:
     def __init__(self, train_ds_path, test_ds_path, output_path):
         self.train_ds_path = train_ds_path
         self.test_ds_path = test_ds_path
-        self.output_path = output_path
+        self.output_path = output_path  # pipeline/data/output
 
         self._logger = logging.getLogger(__name__)
         self._feat = FeatureEngine()
@@ -23,7 +23,7 @@ class TitanicKernelSVMPipeline:
         self._svm = SVM()
         self._y_pred = None
 
-    def _if_dir_exists(self, output_dir):
+    def _if_dir_not_exists_create(self, output_dir):
         if not os.path.exists(output_dir):
             self._logger.info(f"Creating '{output_dir}' local directory.")
             os.makedirs(output_dir)
@@ -54,26 +54,27 @@ class TitanicKernelSVMPipeline:
         except Exception as e:
             raise self._logger.error(f"Fatal Error On 'preprocess_dataset' Step. Trace: {e}")
 
-    def persist(self, test_df, path):
+    def persist(self, test_df, output_path):
         try:
-            output_dir = os.path.dirname(path)
-            self._if_dir_exists(output_dir)
+            self._if_dir_not_exists_create(output_path)
             submission = pd.DataFrame({
                 PASSENGER_ID: test_df[PASSENGER_ID],
                 SURVIVED: self._y_pred
             })
-            submission.to_csv(path, index=False)
+            predictions_csv_path = os.path.join(output_path, "predictions.csv")
+            submission.to_csv(predictions_csv_path, index=False)
+            self._logger.info(f'Successfully Persisted SVM Model Predictions In: {predictions_csv_path}')
         except Exception as e:
             raise self._logger.error(f"Fatal Error On 'persist' Step. Trace: {e}")
 
-    def save_profiler_report(self, pandas_df, dataset_type: str):
+    def save_profiler_report(self, pandas_df, output_path, dataset_type: str):
         profiler = PandasProfiler(
             pandas_df=pandas_df,
             title=f"Pandas Profiler {dataset_type} Dataset"
         )
-        base_path = "data/output/report"
-        self._if_dir_exists(base_path)
-        report_path = f"{base_path}/{dataset_type}-report.html"
+        profiler_report_path = os.path.join(output_path, "report")
+        self._if_dir_not_exists_create(profiler_report_path)
+        report_path = f"{profiler_report_path}/{dataset_type}-report.html"
         profiler.save_report(report_path)
         self._logger.info(f"Profiler Report Generated Successfully On: '{report_path}'.")
 
@@ -85,7 +86,7 @@ class TitanicKernelSVMPipeline:
         self._feat.check_nulls(test_df=train_df)
 
         self._logger.info(f'Generate Profiler Report for Train Dataset.')
-        self.save_profiler_report(train_df, "train")
+        self.save_profiler_report(train_df, self.output_path, "train")
 
         self._logger.info(f'Load Test Dataset: {self.test_ds_path}')
         test_loader = DatasetLoader(self.test_ds_path)
@@ -94,7 +95,7 @@ class TitanicKernelSVMPipeline:
         self._feat.check_nulls(test_df=test_df)
 
         self._logger.info(f'Generate Profiler Report for Test Dataset.')
-        self.save_profiler_report(test_df, "test")
+        self.save_profiler_report(test_df, self.output_path, "test")
 
         self._logger.info('Start Train & Test Datasets Preprocess')
         train_df, test_df = self.preprocess_dataset(train_df, test_df)
@@ -114,7 +115,5 @@ class TitanicKernelSVMPipeline:
         self._logger.info('End SVM Model Predict')
 
         self._svm.score(x_train, s.Y_train)
-        self._logger.info('SVM  Score Model Predict')
 
         self.persist(test_df, self.output_path)
-        self._logger.info(f'Successfully Persisted SVM Model Predictions: {self.output_path}')

@@ -8,14 +8,15 @@ from pipeline.pipeline import TitanicKernelSVMPipeline
 class TestTitanicKernelSVMPipeline(unittest.TestCase):
 
     def setUp(self):
-        self.train_ds_path = "data/input/train.csv"
-        self.test_ds_path = "data/input/test.csv"
-        self.output_path = "data/output/predictions.csv"
+        self.train_ds_path = "pipeline/data/input/train.csv"
+        self.test_ds_path = "pipeline/data/input/test.csv"
+        self.output_path = "tests/pipeline/data/output"
         self.pipeline = TitanicKernelSVMPipeline(
             self.train_ds_path,
             self.test_ds_path,
             self.output_path
         )
+        self._predictions_path = os.path.join(self.output_path, "predictions.csv")
 
     def test_preprocess_dataset(self):
         train_df = pd.DataFrame({
@@ -62,9 +63,9 @@ class TestTitanicKernelSVMPipeline(unittest.TestCase):
 
         self.pipeline.persist(test_df, self.output_path)
 
-        self.assertTrue(os.path.exists(self.output_path))
+        self.assertTrue(os.path.exists(self._predictions_path))
 
-        predictions = pd.read_csv(self.output_path)
+        predictions = pd.read_csv(self._predictions_path)
         self.assertEqual(set(predictions.columns), {PASSENGER_ID, SURVIVED})
         self.assertEqual(predictions.shape[0], test_df.shape[0])
 
@@ -82,9 +83,9 @@ class TestTitanicKernelSVMPipeline(unittest.TestCase):
 
         self.pipeline.process()
 
-        self.assertTrue(os.path.exists(self.output_path))
+        self.assertTrue(os.path.exists(self._predictions_path))
 
-        predictions = pd.read_csv(self.output_path)
+        predictions = pd.read_csv(self._predictions_path)
         self.assertEqual(set(predictions.columns), {PASSENGER_ID, SURVIVED})
         self.assertEqual(predictions.shape[1], test_df.shape[1])
 
