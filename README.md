@@ -52,7 +52,3 @@ Cheers 🍻!
 ### Support or Contact 📠
 
 Having troubles? You can send a [DM](https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox?compose=CllgCJZZQVJHBJKmdjtXgzlrRcRktFLwFQsvWKqcTRtvQTVcHvgTNSxVzjZqjvDFhZlVJlPKqtg) and I’ll help you sort it out.
-
-### License 📃
-
-Released under the Apache License, version 2.0.
