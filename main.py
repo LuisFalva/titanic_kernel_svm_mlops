@@ -30,13 +30,13 @@ class TitanicKernelSVMMain:
         yaml_loader: Loads a YAML configuration file and extracts the dataset and output paths.
         start: Starts the TitanicKernelSVMPipeline with the loaded dataset and output paths.
     """
-    def __init__(self):
+    def __init__(self, output_path=None):
         """
         Initializes a new instance of the TitanicKernelSVMMain class with default attribute values.
         """
         self.train_ds_path = None
         self.test_ds_path = None
-        self.output_path = None
+        self.output_path = output_path
 
     def yaml_loader(self):
         """
@@ -59,7 +59,8 @@ class TitanicKernelSVMMain:
         model_args = config['environment']['model-arguments']
         self.train_ds_path = str(model_args['train_ds_path'])
         self.test_ds_path = str(model_args['test_ds_path'])
-        self.output_path = str(model_args['output_path'])
+        if not self.output_path:
+            self.output_path = str(model_args['output_path'])
 
     def start(self):
         """
