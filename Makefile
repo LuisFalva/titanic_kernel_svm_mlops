@@ -2,7 +2,16 @@
 setup:
 	python -m venv venv
 	source venv/bin/activate && \
+	venv/bin/pip install --upgrade pip
 	venv/bin/pip install -r requirements.txt
+
+clean:
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
+	find . -name '.DS_Store' -type f -delete
+	rm -rf .tox .coverage htmlcov coverage-reports pylint.txt .pytest_cache
 
 # Run all tests
 test-all:
@@ -13,26 +22,42 @@ test-all:
 	make test-pipeline
 	make test-integration
 
+test-clean:
+	make test-all
+	make clean
+
 # Run the tests in the tests directory
 test-functions:
-	python -m unittest discover -v tests/ml/functions
+	coverage run -m unittest discover -v tests/ml/functions
+	coverage report --fail-under 80
+	coverage html -d coverage-reports
 
 test-load:
-	python -m unittest discover -v tests/ml/load
+	coverage run -m unittest discover -v tests/ml/load
+	coverage report --fail-under 80
+	coverage html -d coverage-reports
 
 test-models:
-	python -m unittest discover -v tests/ml/models
+	coverage run -m unittest discover -v tests/ml/models
+	coverage report --fail-under 80
+	coverage html -d coverage-reports
 
 test-preprocess:
-	python -m unittest discover -v tests/ml/preprocess
+	coverage run -m unittest discover -v tests/ml/preprocess
+	coverage report --fail-under 80
+	coverage html -d coverage-reports
 
 # Run pipeline test
 test-pipeline:
-	python -m unittest discover -v tests/pipeline
+	coverage run -m unittest discover -v tests/pipeline
+	coverage report --fail-under 80
+	coverage html -d coverage-reports
 
 # Run integration test
 test-integration:
-	python -m unittest discover -v tests/integration
+	coverage run -m unittest discover -v tests/integration
+	coverage report --fail-under 80
+	coverage html -d coverage-reports
 
 # Run the linter on the code in the ml directory
 lint:

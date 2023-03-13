@@ -34,3 +34,6 @@ jobs:
 
       - name: Run Integration Test
         run: make test-integration
+
+      - name: Clean Directory
+        run: make clean
