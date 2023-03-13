@@ -16,6 +16,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install Python dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+            pwd
+          working-directory: ./path/to/your/project
+
       - name: Run Unit Tests
         run: |
           python -m unittest tests/ml/functions/test_drop_pd_columns.py
