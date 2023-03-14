@@ -31,19 +31,9 @@ The output will be similar to the following:
 █▄▀ █▀▀ █▀█ █▄░█ █▀▀ █░░   ▀█▀ █ ▀█▀ ▄▀█ █▄░█ █ █▀▀
 █░█ ██▄ █▀▄ █░▀█ ██▄ █▄▄   ░█░ █ ░█░ █▀█ █░▀█ █ █▄▄
 
-IPython could not be loaded!
+
 2023-03-12 23:28:09,514 - pipeline.pipeline - INFO - Load Train Dataset: data/input/train.csv
 2023-03-12 23:28:09,518 - pipeline.pipeline - INFO - Successful Load.
-2023-03-12 23:28:09,518 - ml.functions - INFO - no. of nulls for col 'PassengerId' in set 'test_df': 0
-2023-03-12 23:28:09,519 - ml.functions - INFO - no. of nulls for col 'Survived' in set 'test_df': 0
-2023-03-12 23:28:09,519 - ml.functions - INFO - no. of nulls for col 'Pclass' in set 'test_df': 0
-2023-03-12 23:28:09,519 - ml.functions - INFO - no. of nulls for col 'Name' in set 'test_df': 0
-2023-03-12 23:28:09,519 - ml.functions - INFO - no. of nulls for col 'Sex' in set 'test_df': 0
-2023-03-12 23:28:09,520 - ml.functions - INFO - no. of nulls for col 'Age' in set 'test_df': 177 **
-2023-03-12 23:28:09,520 - ml.functions - INFO - no. of nulls for col 'SibSp' in set 'test_df': 0
-2023-03-12 23:28:09,520 - ml.functions - INFO - no. of nulls for col 'Parch' in set 'test_df': 0
-2023-03-12 23:28:09,520 - ml.functions - INFO - no. of nulls for col 'Ticket' in set 'test_df': 0
-2023-03-12 23:28:09,520 - ml.functions - INFO - no. of nulls for
 ```
 
 ## Local Dev & Test 🛠️
