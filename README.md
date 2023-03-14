@@ -63,6 +63,8 @@ make docker-build tag=<your-dev-tag-name>
 > **Warning**:
 > Make sure to use the 'tag' argument to create a new docker image with your changes.
 
+Is stronlgy suggested to use the [EDA](https://github.com/LuisFalva/titanic_kernel_svm_mlops/blob/develop/notebooks/EDA.ipynb) jupyter noteboook with all the pipeline steps devided by each cell and quick explanation for each step.
+
 ### Want to contribute? 🤔
 
 Bring it on! If you have an idea or want to ask anything, or there is a bug you want fixed, you may open an [issue ticket](https://github.com/LuisFalva/titanic_kernel_svm_mlops/issues). You will find the guidelines to make an issue request there. Also, you can get a glimpse of [Open Source Contribution Guide best practices here](https://opensource.guide/).
